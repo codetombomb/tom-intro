@@ -1,0 +1,19 @@
+{
+  "name": "tom-intro",
+  "version": "1.0.0",
+  "description": "Hello, everyone! My name is Tom and I am a Software Developer from TX! This is a small Single Page Application built in vanilla JavaScript that describes me in a gamified way.",
+  "main": "server.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.3"
+  }
+}
