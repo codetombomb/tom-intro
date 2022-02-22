@@ -1,5 +1,5 @@
 loadRoot("http://localhost:3000/mario/")
-loadSpriteAtlas("Mario.png", {
+loadSpriteAtlas("Characters/Mario.png", {
     "mario": {
         x: 0, //starting point vert
         y: 0, // starting point horiz
@@ -13,25 +13,90 @@ loadSpriteAtlas("Mario.png", {
     }
 })
 
+// ADD GRAVITY
+gravity(1600)
+
+
+const floor = loadSpriteAtlas('/Tilesets/OverWorld.png', {
+    "floor": {
+        x: 0,
+        y: 0,
+        width: 16,
+        height: 16,
+    }
+})
+
 scene("mario-move", MarioMove)
 go("mario-move")
 
 function MarioMove() {
-    const marioX = 30;
-    const marioY = 20;
+    // const marioX = 30;
+    // const marioY = 200;
     let speed = 2;
+    gravity(2500)
 
     const mario = add([
-        pos(marioX, marioY),
         sprite("mario"),
+        pos(center()),
+        area(),
+        body()
     ])
     mario.play("idle")
+    addLevel([
+        "                                                                                                                                ",
+        "                                                                                                                                ",
+        "                                                                                                                                ",
+        "                                                                                                                                ",
+        "                                                                                                                                ",
+        "                                                                                                                                ",
+        "                                                                                                                                ",
+        "                                                                                                                                ",
+        "                                                                                                                                ",
+        "                                                                                                                                ",
+        "                                                                                                                                ",
+        "                                                                                                                                ",
+        "                                                                                                                                ",
+        "                                                                                                                                ",
+        "                                                                                                                                ",
+        "                                                                                                                                ",
+        "                                                                                                                                ",
+        "===================   =============================================================   ==========================================",
+        "===================   =============================================================   ==========================================",
+    ], {
+        // define the size of each block
+        width: 16,
+        height: 16,
+        // define what each symbol means, by a function returning a component list (what will be passed to add())
+        "=": () => [
+            sprite("floor"),
+            area(),
+            solid(),
+        ]
+    })
+
 
     mario.onUpdate(() => {
         const right = isKeyDown("right")
         const left = isKeyDown("left")
         const run = isKeyDown("r")
         const curAnim = mario.curAnim()
+        const currCam = camPos();
+        if (currCam.x < mario.pos.x) {
+            camPos(mario.pos.x, currCam.y);
+        } else if(currCam.x > mario.pos.x){
+            camPos(mario.pos.x, currCam.y)
+        }
+
+
+        //JUMP
+        onKeyPress("space", () => {
+            // .isGrounded() is provided by body()
+            if (mario.isGrounded()) {
+                // .jump() is provided by body()
+                mario.jump()
+            }
+        })
+
 
         if (run) {
             speed = 4
@@ -40,7 +105,7 @@ function MarioMove() {
         }
 
         if (right) {
-    
+
             if (curAnim !== "walkRight") {
                 mario.play('walkRight')
             }
